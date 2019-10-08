@@ -1,3 +1,4 @@
+import org.junit.runner.Description;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 public class testWords {
 
-    @Test
+    @Test(description = "Test printing out all the valid words.")
     public void test1() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("work");
@@ -25,7 +26,7 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "working";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         expectedWords.add("work");
@@ -36,17 +37,15 @@ public class testWords {
 
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
+        for (String str : actualWords) {
+            System.out.println("Result of Test1: " + str);
+            Assert.assertTrue(expectedWords.contains(str));
 
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
         }
-
         System.out.println("done");
     }
 
-    @Test
+    @Test(description = "Test printing out all the valid words with an extraneous.")
     public void test2() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -59,7 +58,7 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "abcd";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         expectedWords.add("a");
@@ -69,16 +68,15 @@ public class testWords {
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
 
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
-        }
+        for (String str : actualWords) {
+            System.out.println("Result of Test2 " + str);
+            Assert.assertTrue(expectedWords.contains(str));
 
+        }
         System.out.println("done");
     }
 
-    @Test
+    @Test(description = "Test the behavior with a single character in an input.")
     public void test3() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -91,24 +89,22 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "a";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         expectedWords.add("a");
 
         // checking the length
-    //    Assert.assertEquals(actualWords.size(), expectedWords.size());
+        //    Assert.assertEquals(actualWords.size(), expectedWords.size());
 
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
+        for (String str : actualWords) {
+            System.out.println("Result of Test3 " + str);
+            Assert.assertTrue(expectedWords.contains(str));
         }
-
         System.out.println("done");
     }
 
-    @Test
+    @Test(description = "Test behavior with an empty input.")
     public void test4() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -121,25 +117,18 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
-       //Expected List is empty,
+        //Expected List is empty,
         // expectedWords.add("");
 
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
-
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
-        }
-
         System.out.println("done");
     }
 
-    @Test
+    @Test(description = "Test behavior with a null input.")
     public void test5() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -152,7 +141,7 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = null;
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = null;
         //expectedWords.add(null);
@@ -163,10 +152,10 @@ public class testWords {
         System.out.println("done");
     }
 
-    @Test
+    @Test(description = "Test behavior with an empty dictionary.")
     public void test6() {
         List<String> validWords = new ArrayList<String>();
-       //Dictionary is empty
+        //Dictionary is empty
         //validWords.add("");
 
         Dictionary dictionary = new Dictionary(validWords);
@@ -174,7 +163,7 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "abcd";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         //Expected is Empty
@@ -182,18 +171,10 @@ public class testWords {
 
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
-
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
-        }
-
         System.out.println("done");
     }
 
-    @Test
-    //Dictionary doesn't contain any valid word
+    @Test(description = "Test the behavior when Dictionary doesn't contain any valid word.")
     public void test7() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -206,25 +187,17 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "12345";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
 //        expectedWords.add("");
 
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
-
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
-        }
-
         System.out.println("done");
     }
 
-    @Test
-    // 2 letters combination
+    @Test(description = "Test the behavior with 2 letter combination.")
     public void test8() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -232,13 +205,12 @@ public class testWords {
         validWords.add("ab");
         validWords.add("ba");
 
-
         Dictionary dictionary = new Dictionary(validWords);
 
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "ab";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         expectedWords.add("a");
@@ -249,17 +221,14 @@ public class testWords {
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
 
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
+        for (String str : actualWords) {
+            System.out.println("Result of Test8 " + str);
+            Assert.assertTrue(expectedWords.contains(str));
         }
-
         System.out.println("done");
     }
 
-    @Test
-    // 2 letters combination
+    @Test(description = "Test the behavior with 3 letter combination.")
     public void test9() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -278,13 +247,12 @@ public class testWords {
         validWords.add("cab");
         validWords.add("cba");
 
-
         Dictionary dictionary = new Dictionary(validWords);
 
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "abc";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         expectedWords.add("a");
@@ -306,15 +274,14 @@ public class testWords {
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
 
-        //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
+        for (String str : actualWords) {
+            System.out.println("Result of Test9 " + str);
+            Assert.assertTrue(expectedWords.contains(str));
         }
-
         System.out.println("done");
     }
-    @Test
+
+    @Test(description = "Test the behavior to check the duplicate combination.")
     public void test10() {
         List<String> validWords = new ArrayList<String>();
         validWords.add("a");
@@ -325,21 +292,21 @@ public class testWords {
         AllPossibleWords apw = new AllPossibleWords(dictionary);
 
         String input = "aa";
-        List<String> actualWords = apw.Generate(input);
+        Set<String> actualWords = apw.Generate(input);
 
         List<String> expectedWords = new ArrayList<String>();
         expectedWords.add("a");
-        expectedWords.add("a");
-        expectedWords.add("aa");
         expectedWords.add("aa");
 
         // checking the length
         Assert.assertEquals(actualWords.size(), expectedWords.size());
 
         //To ignore ordering, enumerate and check each expected output
-        for (int i = 0; i < actualWords.size(); i++) {
-            System.out.println("Result: " + actualWords.get(i));
-            Assert.assertTrue(actualWords.contains(expectedWords.get(i)));
+        Assert.assertEquals(actualWords.size(), expectedWords.size());
+        for (String str : actualWords) {
+            System.out.println("Result of Test10: " + str);
+            Assert.assertTrue(expectedWords.contains(str));
+
         }
         System.out.println("done");
     }

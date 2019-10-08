@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class AllPossibleWords {
 
@@ -11,13 +9,13 @@ public class AllPossibleWords {
         dictionary = dict;
     }
 
-    public List<String> Generate(String str) {
+    public Set<String> Generate(String str) {
         if(str == null)
         {
             return null;
         }
 
-        List result = new ArrayList<String>();
+        Set<String> result = new HashSet<String>();
         List<Character> candidates = new ArrayList<Character>();
         for (char ch : str.toCharArray()) {
             candidates.add(ch);
@@ -36,7 +34,7 @@ public class AllPossibleWords {
         return result;
     }
 
-    private void Generate(List<Character> candidates, int writeIndex, char[] buffer, List<String> result)
+    private void Generate(List<Character> candidates, int writeIndex, char[] buffer, Set<String> result)
     {
         //base condition
         if(writeIndex == buffer.length)
