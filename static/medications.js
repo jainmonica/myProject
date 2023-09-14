@@ -1,5 +1,5 @@
 
-    function speakText() {
+    export function speakText() {
         const outputText = document.getElementById('outputText').value;
         const synth = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(outputText);
@@ -12,7 +12,7 @@
         }
     }
 
-    async function processImage() {
+    export async function processImage() {
         const imageUpload = document.getElementById('imageUpload');
         const outputText = document.getElementById('outputText');
     
@@ -53,7 +53,7 @@
         }
     }
     
-    async function callMedicationExtractApi() {
+    export async function callMedicationExtractApi() {
         const medicationText = document.getElementById('medicationText').value;
         const apiUrl = 'https://api-web-app-hackathon2023.azurewebsites.net/api/extract';  // Adjust the API endpoint as needed
 
@@ -77,7 +77,7 @@
             console.error('Error calling the API:', error);
         }
     }
-    function callPredictSideEffects() {
+    export function callPredictSideEffects() {
         const medicationNameInput = document.getElementById("medicationName");
         const sideEffectsDiv = document.getElementById("sideEffects");
         

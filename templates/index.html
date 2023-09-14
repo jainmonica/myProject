@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image to Text to Speech</title>
-    <script type="module" src="{{ url_for('static', filename='medications.js') }}"></script>
+    <script type="module">
+      import { processImage } from '/static/medications.js'
+      import {callMedicationExtractApi} from '/static/medications.js'
+      import {callPredictSideEffects} from '/static/medications.js'
+      import {speakText} from '/static/medications.js'
+
+      // src="{{ url_for('static', filename='medications.js') }}"></script>
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
