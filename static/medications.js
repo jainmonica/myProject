@@ -23,7 +23,7 @@
     
             try {
                 // Send the image to the server for text extraction
-                const response = await fetch('https://api-web-app-hackathon2023.azurewebsites.net/process_image', {
+                const response = await fetch('/process_image', {
                     method: 'POST',
                     body: formData,
                 });
@@ -55,7 +55,7 @@
     
     export async function callMedicationExtractApi() {
         const medicationText = document.getElementById('medicationText').value;
-        const apiUrl = 'https://api-web-app-hackathon2023.azurewebsites.net/api/extract';  // Adjust the API endpoint as needed
+        const apiUrl = '/api/extract';  // Adjust the API endpoint as needed
 
         try {
             const response = await fetch(apiUrl, {
@@ -87,7 +87,7 @@
             return;
         }
         
-        const apiUrl = 'https://api-web-app-hackathon2023.azurewebsites.net/api/predict_side_effects'; // API endpoint
+        const apiUrl = '/api/predict_side_effects'; // API endpoint
         
         fetch(apiUrl, {
             method: "POST",
