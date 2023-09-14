@@ -1,5 +1,5 @@
 
-   export function speakText() {
+    function speakText() {
         const outputText = document.getElementById('outputText').value;
         const synth = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(outputText);
@@ -12,7 +12,7 @@
         }
     }
 
-    export async function processImage() {
+    async function processImage() {
         const imageUpload = document.getElementById('imageUpload');
         const outputText = document.getElementById('outputText');
     
@@ -23,7 +23,7 @@
     
             try {
                 // Send the image to the server for text extraction
-                const response = await fetch('/process_image', {
+                const response = await fetch('https://api-web-app-hackathon2023.azurewebsites.net/process_image', {
                     method: 'POST',
                     body: formData,
                 });
@@ -53,9 +53,9 @@
         }
     }
     
-  export async function callMedicationExtractApi() {
+    async function callMedicationExtractApi() {
         const medicationText = document.getElementById('medicationText').value;
-        const apiUrl = '/api/extract';  // Adjust the API endpoint as needed
+        const apiUrl = 'https://api-web-app-hackathon2023.azurewebsites.net/api/extract';  // Adjust the API endpoint as needed
 
         try {
             const response = await fetch(apiUrl, {
@@ -77,7 +77,7 @@
             console.error('Error calling the API:', error);
         }
     }
-   export function callPredictSideEffects() {
+    function callPredictSideEffects() {
         const medicationNameInput = document.getElementById("medicationName");
         const sideEffectsDiv = document.getElementById("sideEffects");
         
@@ -87,7 +87,7 @@
             return;
         }
         
-        const apiUrl = '/api/predict_side_effects'; // API endpoint
+        const apiUrl = 'https://api-web-app-hackathon2023.azurewebsites.net/api/predict_side_effects'; // API endpoint
         
         fetch(apiUrl, {
             method: "POST",
