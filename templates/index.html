@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">    
+    <script src="{{url_for('static', filename='medication.js')}}"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -44,14 +45,14 @@
             <br><br>
             <textarea id="outputText" placeholder="Extracted Text" readonly></textarea>
             <br><br>
-            <button onclick="processImage()">Extract Text</button>
-            <button onclick="speakText()">Read Text Aloud</button>
+            <button onclick="processImage();">Extract Text</button>
+            <button onclick="speakText();">Read Text Aloud</button>
         </div>
         <!-- Right container for "Medication Information Extraction" -->
         <div class="right-container">
             <h1>Medication Information Extraction</h1>
             <textarea id="medicationText" placeholder="Enter medication information"></textarea>
-            <button onclick="callMedicationExtractApi()">Extract Dosage and Schedule</button>
+            <button onclick="callMedicationExtractApi();">Extract Dosage and Schedule</button>
             <div id="output"></div>
         </div>
         <div class="third-container">
@@ -63,8 +64,6 @@
             <div id="sideEffects"></div>
         </div>
     </div>   
-
-    <script src="{{url_for('static', filename='medication.js')}}"></script>
 
 <!-- Your HTML code -->
 
