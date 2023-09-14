@@ -6,6 +6,13 @@
     <title>Image to Text to Speech</title>
     <script type="module">
       import { processImage, callMedicationExtractApi, callPredictSideEffects, speakText } from '../static/medications.js';
+      document.addEventListener('DOMContentLoaded', function () {
+        // Now, you can safely add event listeners to your buttons
+        document.querySelector('button[data-action="processImage"]').addEventListener('click', processImage);
+        document.querySelector('button[data-action="speakText"]').addEventListener('click', speakText);
+        document.querySelector('button[data-action="callMedicationExtractApi"]').addEventListener('click', callMedicationExtractApi);
+        document.querySelector('button[data-action="callPredictSideEffects"]').addEventListener('click', callPredictSideEffects);
+      });
     </script>
   </head>
 <body>
