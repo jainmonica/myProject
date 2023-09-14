@@ -6,10 +6,8 @@ from get_side_effects  import get_side_effects  # Import your Python method
 from flask_cors import CORS
 from flask_bootstrap import Bootstrap
 
-app = Flask(__name__,
-            static_url_path='/static', 
-            static_folder='/static',
-            template_folder='/templates')
+app = Flask(__name__, static_url_path='/static')
+app.config['DEBUG'] = True
 
 @app.route('/')
 def index():
