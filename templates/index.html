@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Text to Speech</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">CareConvo+</a>
+        <div class="collapse navbar-collapse">
+          <!--To do add active class based on routing-->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none" id="navbar-actions">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#medication">Medication</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#chat">Chat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#resources">Resources</a>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-group ml-auto dropleft">
+          <span class="navbar-text pr-2" id="span-welcomemsg" style="color:white;">
+          </span>
+          <button type="button" id="SignIn" class="btn btn-secondary" onclick="signIn()">
+            Sign In
+          </button>
+        </div>
+      </nav>
+      <br>
+    <div class="container">
+        <!-- Left container for "Image to Text to Speech" -->
+        <div class="left-container">
+            <h1>Image to Text to Speech</h1>
+            <div id="alertMessage"></div>
+            <br><br>
+            <input type="file" accept="image/*" id="imageUpload">
+            <br><br>
+            <textarea id="outputText" placeholder="Extracted Text" readonly></textarea>
+            <br><br>
+            <button onclick="processImage()">Extract Text</button>
+            <button onclick="speakText()">Read Text Aloud</button>
+        </div>
+        <!-- Right container for "Medication Information Extraction" -->
+        <div class="right-container">
+            <h1>Medication Information Extraction</h1>
+            <textarea id="medicationText" placeholder="Enter medication information"></textarea>
+            <button onclick="callMedicationExtractApi()">Extract Dosage and Schedule</button>
+            <div id="output"></div>
+        </div>
+        <div class="third-container">
+            <h1>Medication Side Effect Prediction</h1>
+            <br><br>
+
+            <input type="text" id="medicationName" placeholder="Enter medication name">
+            <button id="predictButton" onclick="callPredictSideEffects()">Predict Side Effects</button>
+            <div id="sideEffects"></div>
+        </div>
+    </div>   
+
+
+<!-- Your HTML code -->
+
+<script>
+
+    function speakText() {
+        const outputText = document.getElementById('outputText').value;
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(outputText);
+        synth.speak(utterance);
+
+        const alertMessage = document.getElementById('alertMessage').textContent;
+        if (alertMessage) {
+            const alertUtterance = new SpeechSynthesisUtterance(alertMessage);
+            synth.speak(alertUtterance);
+        }
+    }
+
+    async function processImage() {
+        const imageUpload = document.getElementById('imageUpload');
+        const outputText = document.getElementById('outputText');
+    
+        const file = imageUpload.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+    
+            try {
+                // Send the image to the server for text extraction
+                const response = await fetch('http://127.0.0.1:3000/process_image', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.extracted_text && data['extracted_text']['Medicine Name']) {
+                        // Display the extracted medicine information
+                        const medicineInfo = data.extracted_text;
+                        outputText.value = `Medicine Name: ${medicineInfo['Medicine Name']}\nMedicine Size: ${medicineInfo['Medicine Size']}\nMedicine Quantity: ${medicineInfo['Medicine Quantity']}\nMedicine Schedule: ${medicineInfo['Medicine Schedule']}`;
+                    } else {
+                        outputText.value = 'No medicine information extracted from the image.';
+                    }
+                    // Update the alert message div
+                    const alertMessageDiv = document.getElementById('alertMessage');
+                    alertMessageDiv.textContent = data.alert_message || '';
+                    
+                } else {
+                    outputText.value = 'Error processing image.';
+                }
+            } catch (error) {
+                console.error('Error processing image:', error);
+                outputText.value = 'Error processing image.';
+            }
+        } else {
+            outputText.value = 'Please select an image.';
+        }
+    }
+    
+    async function callMedicationExtractApi() {
+        const medicationText = document.getElementById('medicationText').value;
+        const apiUrl = 'http://127.0.0.1:3000/api/extract';  // Adjust the API endpoint as needed
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ medication_text: medicationText })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const outputDiv = document.getElementById('output');
+                outputDiv.textContent = JSON.stringify(data, null, 2);
+            } else {
+                console.error('Error calling the API');
+            }
+        } catch (error) {
+            console.error('Error calling the API:', error);
+        }
+    }
+    function callPredictSideEffects() {
+        const medicationNameInput = document.getElementById("medicationName");
+        const sideEffectsDiv = document.getElementById("sideEffects");
+        
+        const medicationName = medicationNameInput.value.trim();
+        if (!medicationName) {
+            alert("Please enter a medication name.");
+            return;
+        }
+        
+        const apiUrl = 'http://127.0.0.1:3000/api/predict_side_effects'; // API endpoint
+        
+        fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ medication_name: medicationName }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.predicted_side_effects) {
+                const sideEffects = data.predicted_side_effects;
+                sideEffectsDiv.textContent = `Predicted Side Effects: ${sideEffects}`;
+            } else {
+                sideEffectsDiv.textContent = "No side effects information available for this medication.";
+            }
+        })
+        .catch(error => {
+            console.error("Error predicting side effects:", error);
+            sideEffectsDiv.textContent = "Error predicting side effects.";
+        });
+    }
+   
+</script>
+<!-- importing bootstrap.js and supporting js libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+</body>
+</html>
+
